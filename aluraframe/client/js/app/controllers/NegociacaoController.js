@@ -20,11 +20,12 @@ class NegociacaoController {
         this.#inputQunatidade = $('#quantidade');
         this.#inputValor = $('#valor');
         
-        this.#listaNegociacoes = new ListaNegociacoes(this, function(model) {
+        /*
+            O escopo de this é léxico em uma arrow function,em vez de ser dinâmico como em uma função
+            assim, o this irá manter o escopo de quando foi crida independente de onde for chamada
+        */ 
 
-            this.#negociacoesView.update(model);
-        });
-
+        this.#listaNegociacoes = new ListaNegociacoes(model => this.#negociacoesView.update(model));
 
         // NegociacoesView recebe o local onde deve ser incluida no DOM
         this.#negociacoesView = new NegociacoesView($('#negociacoesView'));
