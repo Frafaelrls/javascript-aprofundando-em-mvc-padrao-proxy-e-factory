@@ -4,7 +4,6 @@ class MensagemView extends View {
     constructor(elemento) {
         // Método super() será utilizado para passar o elemento para o construtor da classe mãe
         super(elemento);
-        this.#elementoClasseFilha = elemento;
     }
 
     template(model) {
