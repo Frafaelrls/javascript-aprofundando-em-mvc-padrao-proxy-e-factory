@@ -2,14 +2,12 @@ class ListaNegociacoes {
 
     #negociacoes;
     #armadilha;
-    #contexto;
     
-    constructor(contexto, armadilha) {
+    constructor(armadilha) {
 
         this.#negociacoes = [];
         // armadilha recebe uma função
         this.#armadilha = armadilha;
-        this.#contexto = contexto;
     }
 
     adiciona(negociacao) {
@@ -17,10 +15,13 @@ class ListaNegociacoes {
 
         /*
             Classe Reflect.apply, é utilizada para modificar o contexto de execução
-            de uma função e dentro de um array é passado os parâmretros que serão usados. 
+            de uma função e dentro de um array é passado os parâmretros que serão usados.
+            
+            Reflect.apply(this.#armadilha, this.#contexto, [this]);
         */
 
-        Reflect.apply(this.#armadilha, this.#contexto, [this]);
+        this.#armadilha(this);
+        
     }
 
     get negociacoes(){
@@ -30,6 +31,6 @@ class ListaNegociacoes {
     esvazia() {
         this.#negociacoes = [];
 
-        Reflect.apply(this.#armadilha, this.#contexto, [this]);
+        this.#armadilha(this);
     }
 }
