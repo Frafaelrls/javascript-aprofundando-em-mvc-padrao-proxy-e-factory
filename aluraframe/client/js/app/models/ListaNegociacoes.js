@@ -14,4 +14,8 @@ class ListaNegociacoes {
     get negociacoes(){
         return [].concat(this.#negociacoes);
     }
+
+    esvazia() {
+        this.#negociacoes = [];
+    }
 }
