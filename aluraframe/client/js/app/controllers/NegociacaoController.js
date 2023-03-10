@@ -20,13 +20,39 @@ class NegociacaoController {
         this.#inputQunatidade = $('#quantidade');
         this.#inputValor = $('#valor');
         
-        /*
-            O escopo de this é léxico em uma arrow function,em vez de ser dinâmico como em uma função
-            assim, o this irá manter o escopo de quando foi crida independente de onde for chamada
-        */ 
+        let self = this;
 
-        this.#listaNegociacoes = new ListaNegociacoes(model => this.#negociacoesView.update(model));
+        this.#listaNegociacoes = new Proxy(new ListaNegociacoes(), {
 
+            get(target, prop, receiver) {
+
+                /*
+                    Verificando se a propriedade enviada é um dos dois métodos e se é uma função
+                    Caso verdadeiro, será retornado uma função
+                */
+
+                if(['adiciona', 'esvazia'].includes(prop) && typeof(target[prop]) == typeof(Function)) {
+                    
+                    return function() {
+                        console.log(`Interceptando ${prop}`);
+
+                        /*
+                          O Reflect faz com que o método alvo receba os parâmetros (arguments) enviados
+                          e executa o método dentro do seu contexto (target)  
+
+                        */
+
+                        Reflect.apply(target[prop], target, arguments);
+                        self.#negociacoesView.update(target);
+                    }
+                }
+
+                return target[prop];
+                
+            }
+        });
+      
+       
         // NegociacoesView recebe o local onde deve ser incluida no DOM
         this.#negociacoesView = new NegociacoesView($('#negociacoesView'));
         this.#negociacoesView.update(this.#listaNegociacoes);
