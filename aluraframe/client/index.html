@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Negociações</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
 </head>
+
 <body class="container">
-    
+
     <h1 class="text-center">Negociações</h1>
 
     <div id="mensagemView"></div>
 
     <form class="form" onsubmit="negociacaoController.adiciona(event)">
-        
+
         <div class="form-group">
             <label for="data">Data</label>
-            <input type="date" id="data" class="form-control" required autofocus/>        
-        </div>    
-        
+            <input type="date" id="data" class="form-control" required autofocus />
+        </div>
+
         <div class="form-group">
             <label for="quantidade">Quantidade</label>
-            <input type="number" min="1" step="1" id="quantidade" class="form-control" value="1" required/>
+            <input type="number" min="1" step="1" id="quantidade" class="form-control" value="1" required />
         </div>
-        
+
         <div class="form-group">
             <label for="valor">Valor</label>
-            <input id="valor" type="number" class="form-control"  min="0.01" step="0.01" value="0.0" required />
+            <input id="valor" type="number" class="form-control" min="0.01" step="0.01" value="0.0" required />
         </div>
-        
+
         <button class="btn btn-primary" type="submit">Incluir</button>
     </form>
-    
+
     <div class="text-center">
         <button class="btn btn-primary text-center" type="button">
             Importar Negociações
@@ -40,10 +45,10 @@
         <button onclick="negociacaoController.apaga()" class="btn btn-primary text-center" type="button">
             Apagar
         </button>
-    </div> 
+    </div>
     <br>
     <br>
-   
+
     <div id="negociacoesView"></div>
 
     <script src="js/app/models/Negociacao.js"></script>
@@ -57,5 +62,67 @@
     <script>
         let negociacaoController = new NegociacaoController();
     </script>
+
+    <!-- O script abaixo é um script de exemplo não afeta o DOM -->
+    
+    <script>
+
+        let exemplo = new Proxy(new Negociacao(new Date(), 1, 100), {
+
+            /*
+                O método get, será sempre chamado quando for realizado a tentativa 
+                de leitura de uma propriedade do objeto
+
+                O get possui o objeto original (target) em capsulado no Proxy,
+                a propriedade que está sendo acessada (prop) e uma referência para
+                o proprio Proxy (receiver)
+            */
+            get: function (target, prop, receiver) {
+                console.log(`A propriedade "${prop}" foi interceptada`);
+                /*
+                    O retorno abaixo funciona apenas para atributos privados por convenção 
+                    Usando o sublinhado (_)
+                    return Reflect.get(target, prop, receiver);
+                */
+
+                return target[prop];
+
+            
+            },
+
+            /*
+                O set recebe o atributo value, que contém o novo valor para a propriedade
+            */
+
+            set: function(target, prop, value, receiver) {
+                
+                console.log(`Valor anterior: ${target[prop]}, novo valor: ${value}`);
+
+                /*
+                    O retorno abaixo funciona apenas para atributos privados por convenção 
+                    Usando o sublinhado (_)
+                    return Reflect.set(target, prop, value, receiver);
+                */
+
+                return target[prop] = value; 
+
+            }
+            
+
+        });
+
+        /*
+        console.log(exemplo.quantidade);
+        console.log(exemplo.valor);
+        
+        console.log(exemplo.quantidade = 20);
+        console.log(exemplo.valor = 250);
+
+        console.log(exemplo.quantidade);
+        console.log(exemplo.valor);
+        */
+
+    </script>
 </body>
+
 </html>
