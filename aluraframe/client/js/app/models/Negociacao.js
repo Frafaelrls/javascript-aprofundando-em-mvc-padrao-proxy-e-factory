@@ -38,4 +38,16 @@ class Negociacao {
         return this.#quantidade * this.#valor;
     }
 
+    /*
+        Metodos set criados para realizar testes com o método set do Proxy
+    */
+
+    set quantidade(novaQuantidade) {
+        this.#quantidade = novaQuantidade;
+    }
+
+    set valor(novoValor) {
+        this.#valor = novoValor;
+    }
+
 }
