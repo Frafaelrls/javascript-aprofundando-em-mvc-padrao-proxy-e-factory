@@ -2,7 +2,7 @@ class NegociacaoController {
 
     // Atributos privados
     #inputData;
-    #inputQunatidade;
+    #inputQuantidade;
     #inputValor;
     #listaNegociacoes;
     #negociacoesView;
@@ -17,7 +17,7 @@ class NegociacaoController {
         let $ = document.querySelector.bind(document);
 
         this.#inputData = $('#data');
-        this.#inputQunatidade = $('#quantidade');
+        this.#inputQuantidade = $('#quantidade');
         this.#inputValor = $('#valor');
         
         let self = this;
@@ -88,14 +88,14 @@ class NegociacaoController {
 
         return new Negociacao(
             DateHelper.textoParaData(this.#inputData.value),
-            this.#inputQunatidade.value,
+            this.#inputQuantidade.value,
             this.#inputValor.value
         );
     }
 
     #limpaFormulario() {
         this.#inputData.value = '';
-        this.#inputQunatidade.value = 1;
+        this.#inputQuantidade.value = 1;
         this.#inputValor.value = 0.0;
 
         this.#inputData.focus();
