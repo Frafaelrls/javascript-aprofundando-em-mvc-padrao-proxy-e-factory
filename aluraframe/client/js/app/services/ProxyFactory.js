@@ -16,7 +16,7 @@ class ProxyFactory {
                     Caso verdadeiro, será retornado uma função
                 */
 
-                if (props.includes(prop) && typeof (target[prop]) == typeof (Function)) {
+                if (props.includes(prop) && ProxyFactory.#ehFuncao(target[prop])) {
 
                     return function () {
                         console.log(`Interceptando ${prop}`);
@@ -34,8 +34,21 @@ class ProxyFactory {
 
                 return target[prop];
 
+            },
+
+            // O set será chamado quando ocorrer o acesso a uma propriedade
+            set(target, prop, value, receiver) {
+                if (props.includes(prop)) {
+                    target[prop] = value;
+                    acao(target);
+                }
+                return target[prop] = value;
             }
         });
+    }
+
+    static #ehFuncao(func) {
+        return typeof (func) == typeof (Function);
     }
 
 }
