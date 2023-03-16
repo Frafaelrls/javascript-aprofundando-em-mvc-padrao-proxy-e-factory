@@ -19,31 +19,36 @@ class NegociacaoController {
         this.#inputData = $('#data');
         this.#inputQuantidade = $('#quantidade');
         this.#inputValor = $('#valor');
-        
-        this.#listaNegociacoes = ProxyFactory.create(
-            new ListaNegociacoes(), 
-            ['adiciona', 'esvazia'], model =>
-                this.#negociacoesView.update(model));      
-       
+
+
         // NegociacoesView recebe o local onde deve ser incluida no DOM
         this.#negociacoesView = new NegociacoesView($('#negociacoesView'));
-        this.#negociacoesView.update(this.#listaNegociacoes);
 
-        this.#mensagem = ProxyFactory.create( 
-            new Mensagem(), ['texto'], model =>
-                this.#mensagemView.update(model));
+        this.#listaNegociacoes = new Bind(
+            new ListaNegociacoes(),
+            this.#negociacoesView,
+            ['adiciona', 'esvazia']
+        );
+
 
         // MensagemView recebe o local onde deve ser incluida no DOM
-        this.#mensagemView = new MensagemView($('#mensagemView'));  
-        this.#mensagemView.update(this.#mensagem);  
+        this.#mensagemView = new MensagemView($('#mensagemView'));
+
+        this.#mensagem = new Bind(
+            new Mensagem(),
+            this.#mensagemView,
+            ['texto']
+        );
+
+
 
     }
 
     adiciona(event) {
         event.preventDefault();
-        
+
         this.#listaNegociacoes.adiciona(this.#criaNegociacao());
-        this.#mensagem.texto = 'Negociação adicionada com sucesso!';      
+        this.#mensagem.texto = 'Negociação adicionada com sucesso!';
         this.#limpaFormulario();
 
     };
