@@ -5,11 +5,10 @@ class NegociacaoController {
     #inputQuantidade;
     #inputValor;
     #listaNegociacoes;
-    #negociacoesView;
     #mensagem;
-    #mensagemView;
 
     constructor() {
+
         /* 
             O método .bind criar uma função que o seu this tem referência ao atributo fornecido
             Nes caso, a variável $ mantem a associação ao document
@@ -21,26 +20,15 @@ class NegociacaoController {
         this.#inputValor = $('#valor');
 
 
-        // NegociacoesView recebe o local onde deve ser incluida no DOM
-        this.#negociacoesView = new NegociacoesView($('#negociacoesView'));
-
         this.#listaNegociacoes = new Bind(
             new ListaNegociacoes(),
-            this.#negociacoesView,
-            ['adiciona', 'esvazia']
-        );
-
-
-        // MensagemView recebe o local onde deve ser incluida no DOM
-        this.#mensagemView = new MensagemView($('#mensagemView'));
+            new NegociacoesView($('#negociacoesView')),
+            'adiciona', 'esvazia');
 
         this.#mensagem = new Bind(
             new Mensagem(),
-            this.#mensagemView,
-            ['texto']
-        );
-
-
+            new MensagemView($('#mensagemView')),
+            'texto');
 
     }
 
