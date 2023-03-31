@@ -43,38 +43,19 @@ class NegociacaoController {
 
     importaNegociacoes() {
 
-        let xhr = new XMLHttpRequest();
+        let service = new NegociacaoService();
+        // cb = CallBack, função que será chamada depois
+        service.obeterNegociacoesDaSemana((erro, negociacoes) =>{
 
-        xhr.open('GET', 'negociacoes/semana');
-
-        /*
-            Estado da requisição ajax:
-            0: requisição ainda não iniciada
-            1: conexão com o servidor estabelecida
-            2: requisição recebida
-            3: processando requisição
-            4: requisição está concluída e a resposta está pronta
-        */
-
-        // Quando o estado mudar a função é executada 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4) {
-
-                if (xhr.status == 200) {
-                    // transformando o JSON em objetos 
-                    JSON.parse(xhr.responseText)
-                        .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor))
-                        .forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao));
-                    this.#mensagem.texto = 'Negociações importadas com sucesso.'
-                } else {
-                    console.log(xhr.responseText);
-                    this.#mensagem.texto = 'Não foi possível obter as negociações.';
-                }
+            // Pragamação chamada de Error-First-Callback
+            if(erro){
+                this.#mensagem.texto = erro;
+                return
             }
-        };
 
-        xhr.send();
-
+            negociacoes.forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao));
+            this.#mensagem.texto = 'Negociações importadas com sucesso.'
+        });
     }
 
     apaga() {
