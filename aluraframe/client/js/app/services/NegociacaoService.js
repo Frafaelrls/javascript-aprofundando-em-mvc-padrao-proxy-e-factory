@@ -24,7 +24,6 @@ class NegociacaoService {
                     cb(null, JSON.parse(xhr.responseText)
                         .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
 
-
                 } else {
                     console.log(xhr.responseText);
                     cb('Não foi possível obeter as negociações', null);
