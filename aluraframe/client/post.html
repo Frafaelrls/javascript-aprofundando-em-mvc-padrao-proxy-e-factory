@@ -1,0 +1,75 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Negociações</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</head>
+
+<body class="container">
+    <form class="form">
+
+        <div class="form-group">
+            <label for="data">Data</label>
+            <input type="date" id="data" class="form-control" required autofocus/>        
+        </div>    
+
+        <div class="form-group">
+            <label for="quantidade">Quantidade</label>
+            <input type="number" min="1" step="1" id="quantidade" class="form-control" value="1" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="valor">Valor</label>
+            <input id="valor" type="number" class="form-control"  min="0.01" step="0.01" value="0.0" required />
+        </div>
+
+        <button class="btn btn-primary" type="submit" onclick="sendPost(event)">Enviar dados para servidor</button>
+    </form>
+
+    <script>
+        function sendPost(event) {
+
+            event.preventDefault();
+
+            console.log("Enviando post");
+
+            const $ = document.querySelector.bind(document);
+            const inputData = $('#data');
+            const inputQuantidade = $('#quantidade');
+            const inputValor = $('#valor');
+
+            const negociacao = {
+                data: inputData.value,
+                quantidade: inputQuantidade.value,
+                valor: inputValor.value
+            };
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:3000/negociacoes", true);
+            xhr.setRequestHeader("Content-type", "application/json");
+
+            xhr.onreadystatechange = () => {
+
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status == 200) {
+                        inputData.value = '';
+                        inputQuantidade.value = 1;
+                        inputValor.value = 0.0;
+                        inputData.focus();
+                        alert('Negociação enviada com sucesso');
+                    } else {
+                        alert(`Não foi possível enviar a negociação: ${xhr.responseText}`);
+                    }
+                }
+            }
+            xhr.send(JSON.stringify(negociacao));
+
+    }
+    </script>
+</body>
+</html>
