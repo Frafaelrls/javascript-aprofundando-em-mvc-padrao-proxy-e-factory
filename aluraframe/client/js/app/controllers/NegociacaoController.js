@@ -44,9 +44,33 @@ class NegociacaoController {
     importaNegociacoes() {
 
         let service = new NegociacaoService();
-        // cb = CallBack, função que será chamada depois
 
-        /*
+        // Padrão de projeto promise
+
+        let promise = service.obeterNegociacoesDaSemana();
+        promise
+            .then(negociacoes => {
+                negociacoes.forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao))
+                this.#mensagem.texto = 'Negociações da semana obtida com sucesso!';
+            })
+            .catch(erro => this.#mensagem.texto = erro)
+
+        service.obeterNegociacoesDaSemanaAnterior()
+            .then(negociacoes => {
+                negociacoes.forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao))
+                this.#mensagem.texto = 'Negociações da semana anterior obtida com sucesso!';
+            })
+            .catch(erro => this.#mensagem.texto = erro)
+
+        service.obeterNegociacoesDaSemanaRetrasada()
+            .then(negociacoes => {
+                negociacoes.forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao))
+                this.#mensagem.texto = 'Negociações da semana retrasada obtida com sucesso!';
+            })
+            .catch(erro => this.#mensagem.texto = erro)
+
+        /* 
+        
             Abaixo temos um exemplo de código chamado "Pyramid of Doom" ("Pirâmide do destino")
             Isso ocorre quando temos um aninhamento de funções, ou seja, uma função dentro de outras
             funções.
@@ -56,8 +80,8 @@ class NegociacaoController {
             Ocorre quando temos requisições assíncronas executadas em determinada ordem, 
             que chama vários callbacks seguidos.
         
-        */
-       
+        
+
         service.obeterNegociacoesDaSemana((erro, negociacoes) => {
 
             // Pragamação chamada de Error-First-Callback
@@ -89,6 +113,8 @@ class NegociacaoController {
                 });
             });
         });
+        
+        */
 
     }
 
