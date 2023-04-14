@@ -45,17 +45,51 @@ class NegociacaoController {
 
         let service = new NegociacaoService();
         // cb = CallBack, função que será chamada depois
-        service.obeterNegociacoesDaSemana((erro, negociacoes) =>{
+
+        /*
+            Abaixo temos um exemplo de código chamado "Pyramid of Doom" ("Pirâmide do destino")
+            Isso ocorre quando temos um aninhamento de funções, ou seja, uma função dentro de outras
+            funções.
+
+            A pirâmide é um forte indício de que temos problemas de legibilidade do código,
+            e é o sintoma de um problema maior, o "Callback Hell". 
+            Ocorre quando temos requisições assíncronas executadas em determinada ordem, 
+            que chama vários callbacks seguidos.
+        
+        */
+       
+        service.obeterNegociacoesDaSemana((erro, negociacoes) => {
 
             // Pragamação chamada de Error-First-Callback
-            if(erro){
+            if (erro) {
                 this.#mensagem.texto = erro;
                 return
             }
 
             negociacoes.forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao));
-            this.#mensagem.texto = 'Negociações importadas com sucesso.'
+
+            service.obeterNegociacoesDaSemanaAnterior((erro, negociacoes) => {
+
+                if (erro) {
+                    this.#mensagem.texto = erro;
+                    return
+                }
+
+                negociacoes.forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao));
+
+                service.obeterNegociacoesDaSemanaRetrasada((erro, negociacoes) => {
+                   
+                    if (erro) {
+                        this.#mensagem.texto = erro;
+                        return
+                    }
+
+                    negociacoes.forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao));
+                    this.#mensagem.texto = 'Negociações importadas com sucesso.'
+                });
+            });
         });
+
     }
 
     apaga() {
