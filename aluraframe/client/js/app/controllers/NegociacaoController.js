@@ -47,6 +47,25 @@ class NegociacaoController {
 
         // Padrão de projeto promise
 
+        // Promise.all() executa as promises sequencialmente.
+
+        Promise.all([
+            service.obeterNegociacoesDaSemana(),
+            service.obeterNegociacoesDaSemanaAnterior(),
+            service.obeterNegociacoesDaSemanaRetrasada()
+        ]).then(negociacoes => {
+            negociacoes
+            .reduce((arrayAchatado, array) => arrayAchatado.concat(array),[] )
+            .forEach(negociacao => this.#listaNegociacoes.adiciona(negociacao));
+            this.#mensagem.texto = 'Negociações importadas com sucesso';
+        }).catch(erro => this.#mensagem.texto = erro);        
+
+        /*
+            Abaixo temos a aplicação do padrão de projeto promise, mas, o código abaixo
+            é um "Pyramid of Doom". Este tipo de código pode apresentar retornos fora de
+            ordem devido a promise ser assíncrona, onde uma solicitação é executada independente
+            da solicitação anterior.
+
         let promise = service.obeterNegociacoesDaSemana();
         promise
             .then(negociacoes => {
@@ -69,6 +88,8 @@ class NegociacaoController {
             })
             .catch(erro => this.#mensagem.texto = erro)
 
+
+        */
         /* 
         
             Abaixo temos um exemplo de código chamado "Pyramid of Doom" ("Pirâmide do destino")
